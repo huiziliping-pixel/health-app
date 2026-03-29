@@ -1,0 +1,67 @@
+app.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>健康アプリ</title>
+<style>
+body {
+  font-family: sans-serif;
+  background: #f0f8ff;
+  padding: 20px;
+}
+.box {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+button {
+  padding: 8px 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>健康管理アプリ</h1>
+
+<div class="box">
+<h2>食事メモ</h2>
+<input id="food" type="text" placeholder="食べたもの">
+</div>
+
+<div class="box">
+<h2>糖質メモ</h2>
+<input id="carb" type="text" placeholder="糖質（少なめ・多めなど）">
+</div>
+
+<div class="box">
+<h2>運動</h2>
+<input id="exercise" type="text" placeholder="運動内容">
+</div>
+
+<button onclick="save()">記録する</button>
+
+<div class="box">
+<h2>今日の記録</h2>
+<p id="result"></p>
+</div>
+
+<script>
+function save() {
+  let food = document.getElementById("food").value;
+  let carb = document.getElementById("carb").value;
+  let exercise = document.getElementById("exercise").value;
+
+  let text =
+  "食事: " + food + "<br>" +
+  "糖質: " + carb + "<br>" +
+  "運動: " + exercise;
+
+  document.getElementById("result").innerHTML = text;
+}
+</script>
+
+</body>
+</html>
