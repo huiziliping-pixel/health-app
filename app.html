@@ -144,7 +144,25 @@ localStorage.setItem("healthLogs",JSON.stringify(data));
 document.getElementById("food").value="";
 document.getElementById("carb").value="";
 document.getElementById("exercise").value="";
+function saveData(){
 
+let food = document.getElementById("food").value;
+let carb = document.getElementById("carb").value;
+let exercise = document.getElementById("exercise").value;
+
+let data = JSON.parse(localStorage.getItem("healthLogs")) || [];
+
+data.push({
+food:food,
+carb:carb,
+exercise:exercise
+});
+
+localStorage.setItem("healthLogs", JSON.stringify(data));
+
+showLogs();
+
+}
 showLogs();
 }
 
