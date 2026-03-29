@@ -2,46 +2,77 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>健康アプリ</title>
+<title>健康管理アプリ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+
 body{
 font-family:sans-serif;
-background:#f0f8ff;
+background:#eef6ff;
 padding:15px;
 max-width:600px;
 margin:auto;
 }
+
 h1{
 text-align:center;
 }
+
 .box{
 background:white;
 padding:15px;
 margin-bottom:15px;
 border-radius:12px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
+
 input{
 width:100%;
 padding:10px;
 margin-top:5px;
 margin-bottom:10px;
+border-radius:6px;
+border:1px solid #ccc;
 }
+
 button{
 width:100%;
 padding:12px;
 font-size:16px;
+border:none;
+border-radius:8px;
+background:#4da3ff;
+color:white;
+cursor:pointer;
 }
+
+button:hover{
+background:#2f8cff;
+}
+
 .log{
-background:#fff;
+background:#f8fbff;
 padding:10px;
 margin-top:10px;
 border-radius:8px;
+border-left:5px solid #4da3ff;
 }
-.date{
-font-weight:bold;
+
+.today{
+border-left:5px solid #00c853;
+background:#f1fff5;
 }
+
+.delete{
+margin-top:5px;
+background:#ff5c5c;
+}
+
+.stats{
+font-size:14px;
+margin-bottom:10px;
+}
+
 </style>
 </head>
 
@@ -52,21 +83,30 @@ font-weight:bold;
 <div class="box">
 <h2>食事メモ</h2>
 <input id="food" placeholder="食べたもの">
+
 <h2>糖質メモ</h2>
 <input id="carb" placeholder="少なめ・普通・多め">
+
 <h2>運動</h2>
 <input id="exercise" placeholder="ウォーキングなど">
+
 <button onclick="save()">記録する</button>
 </div>
 
 <div class="box">
-<h2>履歴</h2>
+<h2>統計</h2>
+<div class="stats" id="stats"></div>
+</div>
+
+<div class="box">
+<h2>記録</h2>
 <div id="logs"></div>
 </div>
 
 <script>
 
 function save(){
+
 let food=document.getElementById("food").value;
 let carb=document.getElementById("carb").value;
 let exercise=document.getElementById("exercise").value;
@@ -84,25 +124,55 @@ let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
 data.unshift(log);
 localStorage.setItem("healthLogs",JSON.stringify(data));
 
+document.getElementById("food").value="";
+document.getElementById("carb").value="";
+document.getElementById("exercise").value="";
+
+showLogs();
+}
+
+function deleteLog(index){
+let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
+data.splice(index,1);
+localStorage.setItem("healthLogs",JSON.stringify(data));
 showLogs();
 }
 
 function showLogs(){
+
 let logs=document.getElementById("logs");
+let stats=document.getElementById("stats");
+
 let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
 
 logs.innerHTML="";
 
-data.forEach(item=>{
+let exerciseCount=0;
+
+data.forEach((item,index)=>{
+
+if(item.exercise){
+exerciseCount++;
+}
+
+let today=new Date().toLocaleDateString();
+let todayClass=item.date===today ? "log today" : "log";
+
 logs.innerHTML+=`
-<div class="log">
-<div class="date">${item.date}</div>
+<div class="${todayClass}">
+<div><b>${item.date}</b></div>
 食事：${item.food}<br>
 糖質：${item.carb}<br>
 運動：${item.exercise}
+<button class="delete" onclick="deleteLog(${index})">削除</button>
 </div>
 `;
+
 });
+
+stats.innerHTML=
+"記録数：" + data.length + "件<br>" +
+"運動回数：" + exerciseCount + "回";
 }
 
 showLogs();
