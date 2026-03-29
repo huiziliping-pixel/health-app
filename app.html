@@ -94,7 +94,10 @@ margin-bottom:10px;
 
 <button onclick="save()">記録する</button>
 </div>
-
+<div class="box">
+<h2>今日の状態</h2>
+<div id="today"></div>
+</div>
 <div class="box">
 <h2>統計</h2>
 <div class="stats" id="stats"></div>
@@ -145,10 +148,10 @@ showLogs();
 
 function showLogs(){
 
-let logs=document.getElementById("logs");
-let stats=document.getElementById("stats");
 
-let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
+let todayBox = document.getElementById("today");
+let logs = document.getElementById("logs");
+let data = JSON.parse(localStorage.getItem("healthLogs")) || [];
 
 logs.innerHTML="";
 
