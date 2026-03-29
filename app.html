@@ -102,7 +102,8 @@ margin-bottom:10px;
 <h2>記録</h2>
 <div id="logs"></div>
 </div>
-
+<h2>糖質グラフ</h2>
+<div id="carbGraph"></div>
 <script>
 
 function save(){
@@ -176,7 +177,37 @@ stats.innerHTML=
 }
 
 showLogs();
+function showCarbGraph(){
 
+let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
+
+let low=0;
+let normal=0;
+let high=0;
+
+data.forEach(item=>{
+let c=item.carb || "";
+
+if(c.includes("少")) low++;
+else if(c.includes("普通")) normal++;
+else if(c.includes("多")) high++;
+});
+
+let total=low+normal+high;
+
+if(total===0){
+document.getElementById("carbGraph").innerHTML="まだデータがありません";
+return;
+}
+
+document.getElementById("carbGraph").innerHTML=
+"少なめ：" + "█".repeat(low) + " " + low + "<br>" +
+"普通：" + "█".repeat(normal) + " " + normal + "<br>" +
+"多め：" + "█".repeat(high) + " " + high;
+
+}
+
+showCarbGraph();
 </script>
 
 </body>
