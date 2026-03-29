@@ -1,23 +1,46 @@
-app.html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <title>健康アプリ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  font-family: sans-serif;
-  background: #f0f8ff;
-  padding: 20px;
+body{
+font-family:sans-serif;
+background:#f0f8ff;
+padding:15px;
+max-width:600px;
+margin:auto;
 }
-.box {
-  background: white;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
+h1{
+text-align:center;
 }
-button {
-  padding: 8px 15px;
+.box{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+}
+button{
+width:100%;
+padding:12px;
+font-size:16px;
+}
+.log{
+background:#fff;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+}
+.date{
+font-weight:bold;
 }
 </style>
 </head>
@@ -28,39 +51,62 @@ button {
 
 <div class="box">
 <h2>食事メモ</h2>
-<input id="food" type="text" placeholder="食べたもの">
-</div>
-
-<div class="box">
+<input id="food" placeholder="食べたもの">
 <h2>糖質メモ</h2>
-<input id="carb" type="text" placeholder="糖質（少なめ・多めなど）">
-</div>
-
-<div class="box">
+<input id="carb" placeholder="少なめ・普通・多め">
 <h2>運動</h2>
-<input id="exercise" type="text" placeholder="運動内容">
+<input id="exercise" placeholder="ウォーキングなど">
+<button onclick="save()">記録する</button>
 </div>
 
-<button onclick="save()">記録する</button>
-
 <div class="box">
-<h2>今日の記録</h2>
-<p id="result"></p>
+<h2>履歴</h2>
+<div id="logs"></div>
 </div>
 
 <script>
-function save() {
-  let food = document.getElementById("food").value;
-  let carb = document.getElementById("carb").value;
-  let exercise = document.getElementById("exercise").value;
 
-  let text =
-  "食事: " + food + "<br>" +
-  "糖質: " + carb + "<br>" +
-  "運動: " + exercise;
+function save(){
+let food=document.getElementById("food").value;
+let carb=document.getElementById("carb").value;
+let exercise=document.getElementById("exercise").value;
 
-  document.getElementById("result").innerHTML = text;
+let today=new Date().toLocaleDateString();
+
+let log={
+date:today,
+food:food,
+carb:carb,
+exercise:exercise
+};
+
+let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
+data.unshift(log);
+localStorage.setItem("healthLogs",JSON.stringify(data));
+
+showLogs();
 }
+
+function showLogs(){
+let logs=document.getElementById("logs");
+let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
+
+logs.innerHTML="";
+
+data.forEach(item=>{
+logs.innerHTML+=`
+<div class="log">
+<div class="date">${item.date}</div>
+食事：${item.food}<br>
+糖質：${item.carb}<br>
+運動：${item.exercise}
+</div>
+`;
+});
+}
+
+showLogs();
+
 </script>
 
 </body>
