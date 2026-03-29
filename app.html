@@ -148,7 +148,7 @@ document.getElementById("exercise").value="";
 showLogs();
 }
 
-function deleteLog(index){
+function deleteLogs()
 let data=JSON.parse(localStorage.getItem("healthLogs"))||[];
 data.splice(index,1);
 localStorage.setItem("healthLogs",JSON.stringify(data));
@@ -156,6 +156,40 @@ showLogs();
 }
 
 function showLogs(){
+
+let data = JSON.parse(localStorage.getItem("healthLogs")) || [];
+
+let carbLabels=[];
+let carbData=[];
+let exerciseCount=0;
+
+data.forEach((item,index)=>{
+
+if(item.carb){
+carbLabels.push(index+1+"日目");
+carbData.push(item.carb);
+}
+
+if(item.exercise){
+exerciseCount++;
+}
+
+});
+
+let ctx = document.getElementById("carbChart");
+
+new Chart(ctx,{
+type:"line",
+data:{
+labels:carbLabels,
+datasets:[{
+label:"糖質量",
+data:carbData
+}]
+}
+});
+
+}
 showLogs();
 
 let todayBox = document.getElementById("today");
